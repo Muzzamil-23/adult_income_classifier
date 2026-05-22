@@ -38,23 +38,40 @@ adult_income_classifier/
 
 The training notebook explores and evaluates four classification models using Scikit-learn pipelines. Each model uses a preprocessing pipeline that handles numeric and categorical features.
 
+### Model Performance Comparison
+
+| Model | Accuracy |
+|-------|----------|
+| Logistic Regression | 85.74% |
+| Decision Tree | 81.96% |
+| **Support Vector Classifier (SVC)** | **86.17%** |
+| K-Nearest Neighbors (KNN) | 84.01% |
+
+### Model Descriptions
+
 - **Logistic Regression**
   - A linear model for binary classification.
   - Serves as a baseline model and helps measure how well a linear decision boundary performs.
+  - Accuracy: **85.74%**
 
 - **Decision Tree**
   - A tree-based model that captures non-linear feature interactions.
   - Useful for interpretability and for learning simple rules from categorical and numeric features.
+  - Accuracy: **81.96%**
 
-- **Support Vector Classifier (SVC)**
+- **Support Vector Classifier (SVC)** ⭐ **Selected Model**
   - A robust model that finds an optimal margin between income classes.
-  - In the notebook evaluation, SVC achieved the highest accuracy at approximately **86.17%**.
+  - Achieved the **highest accuracy at 86.17%**, making it the best performer among all models.
+  - Used in the production backend for inference.
 
 - **K-Nearest Neighbors (KNN)**
   - A non-parametric method that predicts class based on nearest neighbors.
   - Good for capturing local structure in the feature space.
+  - Accuracy: **84.01%**
 
-The current backend loads a serialized `model.pkl` pipeline, which is the trained model used for prediction.
+### Model Selection
+
+**SVC (Support Vector Classifier) was selected for production deployment** due to its superior accuracy of **86.17%**, outperforming all other models. The trained SVC pipeline is serialized and loaded by the backend from `backend/app/model/model.pkl` for real-time predictions.
 
 ## Tech Stack
 
@@ -177,10 +194,14 @@ Returns a basic status message:
 
 Send a JSON object matching the `IncomePredictionRequest` schema.
 
+**Live Endpoint:** `https://muzzamilsid-adult-income-classifier-api.hf.space/predict`
+
+**Local Endpoint:** `http://localhost:7860/predict`
+
 Example request:
 
 ```bash
-curl -X POST http://localhost:7860/predict \
+curl -X POST https://muzzamilsid-adult-income-classifier-api.hf.space/predict \
   -H "Content-Type: application/json" \
   -d '{
     "age": 35,
@@ -213,6 +234,12 @@ Example response:
 
 ## Deployment
 
+### Live Deployment Links
+
+- **Frontend (Streamlit):** https://adultincomeclassifier-gxtwmldr79tt3x5jzdphvc.streamlit.app/
+- **Backend (FastAPI):** https://muzzamilsid-adult-income-classifier-api.hf.space/docs
+- **Backend Prediction Endpoint:** `https://muzzamilsid-adult-income-classifier-api.hf.space/predict`
+
 ### Docker (backend)
 
 Build the backend image:
@@ -228,9 +255,9 @@ Run the container:
 docker run -p 7860:7860 adult-income-backend
 ```
 
-### Notes
+### Local Deployment Notes
 
-- The repository does not currently include a published public deployment URL.
+- The repository does not require a published public deployment URL for local development.
 - Use the Docker setup above or host the backend and Streamlit app on your preferred cloud service.
 
 ## Notebook and Model Development
